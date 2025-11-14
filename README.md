@@ -42,3 +42,14 @@ The getColors() function produces a stream of color values. It relies on Stream.
 - Step 15 changes the button so it sends an error to the stream instead of a number.
 
 ![alt text](img/Question7.gif)
+
+## Practical 3 : Injecting data into streams
+### Question 8 
+**Explain the meaning of the code steps 1-3!**
+- Step 1 creates a temporary variable that will store the transformation rules for the stream.
+
+- Step 2 specifies how the transformer works: valid numbers are multiplied by 10, while any errors are replaced with the value -1.
+
+- Step 3 attaches this transformer to the stream so the UI listener receives the processed output instead of the original values.
+
+![alt text](img/Question8.gif)
