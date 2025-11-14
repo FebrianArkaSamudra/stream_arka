@@ -1,16 +1,19 @@
-# stream_arka
+# PRACTICUM 12 
+## Practical 1 : Dart Streams
 
-A new Flutter project.
+**Question 1**
+![alt text](img/Question1.png)
 
-## Getting Started
+**Question 2**
+![alt text](img/Question2.png)
 
-This project is a starting point for a Flutter application.
+**Question 3** 
+![alt text](img/Question3.png)
 
-A few resources to get you started if this is your first Flutter project:
+**Explanation of yield**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+yield* in an async* function is used to forward all events from another stream directly into the current one. Rather than emitting each value manually, it automatically relays every event produced by the other stream.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**Explanation of the Code**
+
+The getColors() function produces a stream of color values. It relies on Stream.periodic to emit a new color every second, and the expression t % colors.length makes the sequence cycle continuously. Using yield*, the function passes along every emitted value from the periodic stream, allowing each generated color to be produced as an event in its own stream.
