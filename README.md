@@ -84,3 +84,8 @@ When you convert a normal stream into a broadcast stream using `asBroadcastStrea
 - Step **7** (inside `StreamBuilder`): This step receives the latest emitted value from the stream through `snapshot.data` and displays it in a large `Text` widget. Every time the stream sends a new number, the `StreamBuilder` rebuilds the UI and updates the displayed number accordingly, providing real-time updates without manually calling `setState()`.
 
 ![alt text](img/Question12.gif)
+
+## Practical 7 : BLoC Pattern
+The BLoC pattern in this code appears in how the `RandomNumberBloc` separates business logic from the UI by using **streams and sinks**: the UI sends an event into the BLoC through the `generateRandom` **sink**, and the BLoC processes that event internally (generating a random number) and outputs the result through the `randomNumber` **stream**. The widget never handles the logic directly—it only listens to the stream via `StreamBuilder`, while the BLoC class controls all state changes and data flow, which is the core principle of the BLoC pattern.
+
+![alt text](img/Question13gif)
