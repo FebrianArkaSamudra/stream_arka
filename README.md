@@ -64,3 +64,23 @@ The getColors() function produces a stream of color values. It relies on Stream.
 - Step **8** specifies what happens when the stream is finished: the `onDone` callback runs and prints a message, signaling that no more events will be received.
 
 ![alt text](img/Question9.gif)
+
+## Practical 5 : Multiple stream subscriptions
+### Question 10
+**Why the errors happened**
+The error *“Bad state: Stream has already been listened to”* occurs because a **single-subscription stream** in Flutter can only have **one active listener**, but your code calls `stream.listen()` twice on the same stream. This causes the second listener to attach to a stream that is already being listened to, triggering the error. To fix it, either convert the stream to a **broadcast stream** using `stream.asBroadcastStream()` or ensure you only use one listener.
+
+### Question 11
+**Why that's happened?**
+When you convert a normal stream into a broadcast stream using `asBroadcastStream()`, the stream becomes capable of having **multiple listeners**, and each listener receives the same events independently. Since your code listens to the broadcast stream **twice**, every emitted value is delivered to **both listeners**, causing each event to appear **twice** in your output. The stream itself is not generating extra numbers—it's simply sending the same number to multiple listeners, which makes it look like the output has doubled.
+
+![alt text](img/Question11.gif)
+
+## Practical 6 : Stream Builder
+### Question 12
+**Explain the meaning of the code step 3 and 7**
+- Step **3** (inside `getNumbers()`): This step uses `Stream.periodic` to generate a new number every second, and inside the callback it creates a `Random` instance to produce a random integer between 0 and 9. Each generated value is then emitted into the stream using `yield*`, meaning the stream continuously outputs random numbers at fixed 1-second intervals.
+
+- Step **7** (inside `StreamBuilder`): This step receives the latest emitted value from the stream through `snapshot.data` and displays it in a large `Text` widget. Every time the stream sends a new number, the `StreamBuilder` rebuilds the UI and updates the displayed number accordingly, providing real-time updates without manually calling `setState()`.
+
+![alt text](img/Question12.gif)
