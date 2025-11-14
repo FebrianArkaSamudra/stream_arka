@@ -53,3 +53,14 @@ The getColors() function produces a stream of color values. It relies on Stream.
 - Step 3 attaches this transformer to the stream so the UI listener receives the processed output instead of the original values.
 
 ![alt text](img/Question8.gif)
+
+## Practical 4 : Subscribe to stream events
+### Question 9
+**Explain the meaning of the code step 2, 6, 8**
+- Step **2** initializes the `Stream` by taking the controller’s stream and immediately starts listening to incoming events so that every new value updates `lastNumber` in the UI.
+
+- Step **6** defines how the app should react when an error occurs in the stream—any error triggers the `onError` callback, which sets `lastNumber` to `-1` to indicate a failure.
+
+- Step **8** specifies what happens when the stream is finished: the `onDone` callback runs and prints a message, signaling that no more events will be received.
+
+![alt text](img/Question9.gif)

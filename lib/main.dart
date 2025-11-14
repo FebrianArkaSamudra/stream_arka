@@ -14,9 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Stream - Febrian Arka Samudra - 2341720066',
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-      ),
+      theme: ThemeData(primarySwatch: Colors.amber),
       home: const StreamHomePage(),
     );
   }
@@ -32,6 +30,7 @@ class StreamHomePage extends StatefulWidget {
 class _StreamHomePageState extends State<StreamHomePage> {
   Color bgColor = Colors.blueGrey;
   late ColorStream colorStream;
+  late StreamSubscription subscription;
 
   int lastNumber = 0;
   late StreamController<int> numberStreamController;
@@ -39,41 +38,43 @@ class _StreamHomePageState extends State<StreamHomePage> {
 
   @override
   void initState() {
-    super.initState();
-
-    colorStream = ColorStream();
-    changeColor();
-
     numberStream = NumberStream();
     numberStreamController = numberStream.controller;
-
-    final transformer = StreamTransformer<int, int>.fromHandlers(
-      handleData: (value, sink) {
-        sink.add(value * 10);  
-      },
-      handleError: (error, trace, sink) {
-        sink.add(-1);         
-      },
-      handleDone: (sink) => sink.close(),
-    );
-
-    numberStreamController.stream
-        .transform(transformer)
-        .listen((event) {
+    Stream stream = numberStreamController.stream;
+    subscription = stream.listen((event) {
       setState(() {
         lastNumber = event;
       });
-    }, onError: (error) {
+    });
+
+    subscription.onError((error) {
       setState(() {
         lastNumber = -1;
       });
     });
+
+    subscription.onDone(() {
+      print("onDone was called");
+    });
+
+    super.initState();
+  }
+
+  void stopStream() {
+    numberStreamController.close();
   }
 
   void addRandomNumber() {
-    final random = Random();
-    int newNumber = random.nextInt(10);
-    numberStream.addNumber(newNumber);
+    Random random = Random();
+    int myNum = random.nextInt(10);
+    
+    if (!numberStreamController.isClosed) {
+      numberStream.addNumber(myNum);
+    } else {
+      setState(() {
+        lastNumber = -1;
+      });
+    }
   }
 
   void changeColor() {
@@ -105,6 +106,10 @@ class _StreamHomePageState extends State<StreamHomePage> {
               onPressed: addRandomNumber,
               child: const Text('New Random Number'),
             ),
+            ElevatedButton(
+              onPressed: () => stopStream(),
+              child: const Text('Stop Subscription'),
+            ),
           ],
         ),
       ),
@@ -114,6 +119,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
   @override
   void dispose() {
     numberStreamController.close();
+    subscription.cancel();
     super.dispose();
   }
 }
